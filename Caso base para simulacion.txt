@@ -1,0 +1,71 @@
+Escenario:
+
+Empresa x realizo un mojamiento el año aaaa a sus 220 hectareas cultivadas.
+Realizo 3 aplicaciones: de 300, 400 y 500 litros por hectarea.
+Los tractores cubrian 6, 5 y 4.5 hectareas respectivamente por dia.
+Utilizó 3 tractores de 2000l de capacidad para la obra.
+
+Variables fijas:
+
+Tengo 220 hectáreas por cubrir
+Tengo 3 tractores a utilizar
+Tienen 2,000 de capacidad
+
+Problema:
+
+Quiero saber cuanto se demoraron en cubrir las 220 hectareas los 3 tractores por aplicacion
+Tambien quiero saber la cantidad de litros diarios utilizados por cada tractor en cada aplicacion
+
+Proceso:
+
+Puedo saber el total de dias empleados siguiendo la formula "total de dias / (rendimiento * numero de tractores)"
+Puedo determinar los litros diarios utilizados por cada tractor con la formula "litros * rendimiento"
+Puedo determinar los litros empleados totales con la formula "hectareas totales * litros por hectarea"
+
+Aplicacion:
+
+-Dias de trabajo
+
+    300 litros == 220 / ( 6 * 3 )   = 12.222 d | 13 dias o 2 semana laboral y 3 dias
+    400 litros == 220 / ( 5 * 3 )   = 14.667 d | 15 dias o 3 semanas laborales
+    500 litros == 220 / ( 4.5 * 3)  = 16.267 d | 17 dias o 3 semanas laborales y 2 dias
+
+-Litros diarios por tractor
+
+    300 * 6     = 1,800 litros 1
+    400 * 5     = 2,000 litros 1
+    500 * 4.5   = 2,250 litros 2
+
+-Litros empleados totales 
+
+    220 * 300 =  66,000 
+    220 * 400 =  88,000 
+    220 * 500 = 110,000 
+
+Resultados:
+
+La diferencia en "dias empleados" por cada 100 litros por hectarea extra es aproximadamente de 2 dias.
+La diferencia en "litros utilizados diarios" por cada 100 litros por hectarea extra es aproximadamente 225 litros.
+La diferencia en "litros totales empleados" por cada 100 litros por hectarea extra es de 22,000 litros.
+
+---------------------------
+Tractores de la obra
+
+
+
+
+Tractores arrendados
+
+35,000 * 30 = 1,050,000 / 1 tractor arrendado
+35,000 * 70 = 2,100,000 / 2 tractores arrendados
+
+Cosechadora
+
+7.5 * 28385 = 212,887.5 / valor diario
+212,887.5 / 13 = 16,376 / valor por hectarea
+
+
+cosechadora (13 12 11) rendimiento en hectareas
+porcentaje de fallo 8%
+recuperar en 2 a 5 (fijo 3 o 4)
+
