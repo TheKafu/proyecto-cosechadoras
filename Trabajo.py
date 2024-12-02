@@ -1,10 +1,12 @@
 import random
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
 
+#establesco una seed para reproducir el proceso
+random.seed(2024)
+
 # Hago la clase tractor para diferenciar los distintos mojamientos con su rendimiento diario
-class Tractor:
+class Maquinaria:
     def __init__(self, rendimiento_c, rendimiento, tractor_activo, tractor_activo2, cosechadora_activa, name):
 
         self.rendimiento_c = rendimiento_c              # rendimiento de cosechadra
@@ -12,11 +14,11 @@ class Tractor:
         self.tractor_activo = tractor_activo            # arriendo de 1 tractor
         self.tractor_activo2 = tractor_activo2          # arriendo de 2 tractores
         self.cosechadora_activa = cosechadora_activa    # uso de cosechadora
-        self.name = name                                # nombre de la aplicacion
+        self.name = name                                # nombre de la aplicación
 
-aplicacion1 = Tractor(13, 6, False, False, False, "300 litros por hectarea")        
-aplicacion2 = Tractor(12, 5, False, False, False, "400 litros por hectarea")       
-aplicacion3 = Tractor(11, 4.5, False, False, False, "500 litros por hectarea")     
+aplicacion1 = Maquinaria(13, 6, False, False, False, "300 litros por hectarea")
+aplicacion2 = Maquinaria(12, 5, False, False, False, "400 litros por hectarea")
+aplicacion3 = Maquinaria(11, 4.5, False, False, False, "500 litros por hectarea")
 
 # asigno en valores fijos la cantidad de tractores y cosechadoras para uso dentro de la simulacion
 tractores = 3 
@@ -154,14 +156,14 @@ resultados = []
 sim_app = aplicacion1
 
 # ejecutamos la simulacion 1000 veces con la aplicacion preferida 
-for i in range(10000):
+for i in range(100000):
     resultados.append(simulacion(sim_app))
 # cargamos el array a un array de numpy para futuros calculos y graficos
 resultados_np = np.array(resultados)
 
-# imprimimos los 148 primeros resultados para verificar funcionamiento
+# imprimimos los 100 primeros resultados para verificar funcionamiento
 print(f"\n_____Aplicacion utilizada: {sim_app.name}______\n\nVariables utilizadas\n  -Un tractor arrendado: {sim_app.tractor_activo}\n  -Dos tractor arrendados: {sim_app.tractor_activo2}\n  -Cosechadora utilizada: {sim_app.cosechadora_activa}")
-print(f"\nMuestra de los resultados\n{resultados_np[:148]}\n")
+print(f"\nMuestra de los resultados\n{resultados_np[:100]}\n")
 
 
 

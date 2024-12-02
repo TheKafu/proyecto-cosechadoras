@@ -74,7 +74,7 @@ def simulacion(app):
         if hectareas_totales<hectareas:
             
             ## Inicio un dia
-            print(f"Iteracion {i + 1} \n--------------")
+            print(f"Iteracion {i + 1} \n--------------\n")
 
             # se selecciona uno de los 4 escenarios de manera aleatoria y lo restamos de los tractores utilizados
             # esto para calcular los tractores operativos durante el dia
@@ -82,15 +82,15 @@ def simulacion(app):
             tractores_totales = tractores - escenario[0]
             # para la cosechadora solo es necesario saber si falló o no
             escenario_c = random.choices([0, 1], weights=probabilidades_c, k=1) 
-            print(f"+Escenario: {escenario[0]} falla/s ; Tractores: {tractores} ; Tractores operando: {tractores_totales}")
-            print(f"+Escenario_C: {escenario_c[0]} falla/s ")
-            print(f"Hectareas previas: {hectareas_totales}")
+            print(f"Escenario: {escenario[0]} falla/s ; Tractores: {tractores} ; Tractores operando: {tractores_totales}")
+            print(f"Escenario_C: {escenario_c[0]} falla/s ")
+            print(f"  Hectareas previas: {hectareas_totales}\n")
 
     ### Para trabajar los tractores:
 
             # si por lo menos uno falla
             if escenario[0] > 0:
-                print("¡¡Alerta: han fallado tractores!!")
+                print("¡¡Alerta: han fallado tractores!!\n")
                 # iteramos este proceso por la cantidad de tractores con falla 
                 rango_trabajado = 0 
                 for i in range(escenario[0]):
@@ -101,12 +101,13 @@ def simulacion(app):
                 # finalmente calculamos el trabajo diario por los tractores con la siguiente formula:
                 # rendimiento diario (en hectareas) * tractores operativos + rango trabajado por los tractores con falla
                 dia_trabajado = aplicacion.rendimiento*(tractores_totales) + rango_trabajado
-                print(f"Trabajo diario T logrado: {round(dia_trabajado,1)}")
+                print(f"Trabajo diario logrado antes del fallo: {round(dia_trabajado,1)}")
             # si ningun tractor falla
             else:
+                print("Tractores operativos\n")
                 # calculamos el trabajo diario multiplicando el rendimiento diario por la cantidad de tractores
                 dia_trabajado = aplicacion.rendimiento*(tractores)
-                print(f"Trabajo diario T logrado: {dia_trabajado}") 
+                print(f"Trabajo diario logrado: {dia_trabajado}") 
 
             # sumamos las hectareas trabajadas del dia al total de hectareas y sumamos un dia al total de dias
             hectareas_totales = hectareas_totales + dia_trabajado
@@ -115,31 +116,31 @@ def simulacion(app):
 
             # si tenemos la cosechadora activa realizamos el mismo proceso que realizamos con los tractores
             if app.cosechadora_activa == True:
-
+                print("\n**Aplicación con cosechadora operativa**\n")
                 # verificamos que la cosechadora no se encuentre en un dia de penalización
                 # son 2 dias de reparación a la cosechadora luego de fallar
                 if cosechadora_count == 0:
-                    print("Cosechadora activa")
 
                     # si falla la cosechadora 
                     if escenario_c[0] == 1:      
-                        print("¡¡Alerta: ha fallado la cosechadora!!")
+                        print("¡¡Alerta: ha fallado la cosechadora!!\n")
                         # cargamos el dia trabajado con un numero entre 0 y el rendimiento en hectareas
                         # esto será lo trabajado por la cosechadora antes de fallar
                         dia_trabajado = random.uniform(0,aplicacion.rendimiento_c)
 
                         # como falló la cosechadora le damos 2 dias de penalización por falla
                         cosechadora_count = cosechadora_count + 2
-                        print(f"Trabajo diario C logrado: {dia_trabajado}") 
+                        print(f"Trabajo diario logrado antes del fallo: {round(dia_trabajado,1)}") 
                         
                     # si no falla la cosechadora
                     else:
+                        print("Cosechadora operativa\n")
                         # se carga el dia trabajado con el rendimiento total de la cosechadora
                         dia_trabajado = aplicacion.rendimiento_c 
-                        print(f"Trabajo diario C logrado: {dia_trabajado}")   
+                        print(f"Trabajo diario logrado: {dia_trabajado}")   
                 # si se encuentra en un dia de penalización, solo se descuenta uno de estos dias
                 else:
-                    print(f"Cosechadora en reparacion \n Dias restantes: {cosechadora_count}")
+                    print(f"Cosechadora en reparacion \n Dias restantes: {cosechadora_count}\n")
                     cosechadora_count = cosechadora_count - 1
                     pass
 
@@ -147,8 +148,8 @@ def simulacion(app):
                 hectareas_totales = hectareas_totales + dia_trabajado
 
             dias_totales = dias_totales+1
-            print(f"Hectareas acumuladas: {hectareas_totales}")
-            print(f"Dias acumulados: {dias_totales}")
+            print(f"  Hectareas acumuladas: {hectareas_totales}")
+            print(f"Dias acumulados: {dias_totales}\n")
             print("Fin de iteracion")
             print("--------------")
 
