@@ -1,8 +1,9 @@
 import random
 import pandas as pd
 import numpy as np
+from openpyxl import load_workbook
 
-#establesco una seed para reproducir el proceso
+# se establece una seed (en cualquier numero) para que los datos sean consistentes entre aplicaciones
 random.seed(2024)
 
 # Hago la clase tractor para diferenciar los distintos mojamientos con su rendimiento diario
@@ -17,8 +18,8 @@ class Maquinaria:
         self.name = name                                # nombre de la aplicación
 
 aplicacion1 = Maquinaria(13, 6, False, False, False, "300 litros por hectarea")
-aplicacion2 = Maquinaria(12, 5, False, False, False, "400 litros por hectarea")
-aplicacion3 = Maquinaria(11, 4.5, False, False, False, "500 litros por hectarea")
+aplicacion2 = Maquinaria(12, 5, False,False,False, "400 litros por hectarea")
+aplicacion3 = Maquinaria(11, 4.5, False,False,False, "500 litros por hectarea")
 
 # asigno en valores fijos la cantidad de tractores y cosechadoras para uso dentro de la simulacion
 tractores = 3 
@@ -40,7 +41,7 @@ p_3 =1*pf**3            # 3 fallan
 p_0 = round(p_0, 3) 
 p_1 = round(p_1, 3)
 p_2 = round(p_2, 3)
-p_3 = round(p_3, 3)
+p_3 = round(p_3, 3) 
 
 # y cargo a un array de 4 opciones las 4 probabilidades de que ocurra tal escenario (como un dado cargado)
 probabilidades = [p_0, p_1, p_2, p_3]   # el dado trabaja con una precicion de 0.999 debido a la perdida decimales
@@ -59,11 +60,11 @@ def simulacion(app):
 
     aplicacion = app                    # carga de aplicacion a la funcion simulacion()
     dias_totales = 0                    # contador de dias 
-    hectareas_totales = 0
-    hectareas = 220
-    if app.tractor_activo == True:
+    hectareas_totales = 0               # contador de hectareas
+    hectareas = 220                     # total de hectareas por completar
+    if app.tractor_activo == True:      # total de hectareas por completar con 1 tractor arrendado
         hectareas = 190
-    elif app.tractor_activo2 == True:
+    elif app.tractor_activo2 == True:   # total de hectareas por completar con 2 tractores arrendado
         hectareas = 160
     cosechadora_count = 0
 
@@ -79,6 +80,7 @@ def simulacion(app):
             # esto para calcular los tractores operativos durante el dia
             escenario = random.choices([0, 1, 2, 3], weights=probabilidades, k=1) 
             tractores_totales = tractores - escenario[0]
+            
             # para la cosechadora solo es necesario saber si falló o no
             escenario_c = random.choices([0, 1], weights=probabilidades_c, k=1) 
 
@@ -89,6 +91,7 @@ def simulacion(app):
 
                 # iteramos este proceso por la cantidad de tractores con falla 
                 rango_trabajado = 0 
+                
                 for i in range(escenario[0]):
                     # cargamos una sumatoria de un numero aleatorio entre 0 y el rendimiento en hectareas
                     # esto sera lo trabajado por los tractores antes de fallar
@@ -152,6 +155,7 @@ def simulacion(app):
 
 # creamos un array donde se alojaran todos los resultados de las simulaciones
 resultados = []
+
 # escogemos la simulacion a trabajar
 sim_app = aplicacion1
 
@@ -165,13 +169,9 @@ resultados_np = np.array(resultados)
 print(f"\n_____Aplicacion utilizada: {sim_app.name}______\n\nVariables utilizadas\n  -Un tractor arrendado: {sim_app.tractor_activo}\n  -Dos tractor arrendados: {sim_app.tractor_activo2}\n  -Cosechadora utilizada: {sim_app.cosechadora_activa}")
 print(f"\nMuestra de los resultados\n{resultados_np[:100]}\n")
 
-
-
 serie = pd.Series(resultados_np, name="Valores")
-
-# Análisis estadístico básico
+# Descripción estadística
 descripcion = serie.describe()
-
 # Frecuencias de cada valor
 frecuencias = serie.value_counts()
 
@@ -179,3 +179,54 @@ frecuencias = serie.value_counts()
 print(f"Descripción estadística básica:\n{descripcion}\n")
 
 print(f"Frecuencias de cada valor:\n{frecuencias}")
+
+
+"""
+### Poblar excel con los resultados
+
+# extraemos los valores específicos a poblar
+datos = {
+    "Promedio": descripcion["mean"],
+    "Desviación": descripcion["std"],
+    "Mínimo": descripcion["min"],
+    "Máximo": descripcion["max"]
+}
+
+# cargamos la ruta del archivo de excel
+ruta_excel = "Resultados.xlsx"
+
+try:
+    libro = load_workbook(ruta_excel)
+except FileNotFoundError:
+    # si el archivo no existe, creamos uno nuevo
+    libro = load_workbook()
+
+# cargamos la hoja a trabajar
+nombre_hoja = "Tabla"
+
+# verificamos si la hoja existe, creamos la hoja de no existir
+if nombre_hoja not in libro.sheetnames:
+    hoja = libro.create_sheet(title=nombre_hoja)
+else:
+    hoja = libro[nombre_hoja]
+
+# fila a poblar
+fila = 3
+
+# cargamos las ubicaciones dentro de la fila para cada dato
+ubicaciones = {
+    "Promedio": f"D{fila}",
+    "Desviación": f"E{fila}",
+    "Mínimo": f"F{fila}",
+    "Máximo": f"G{fila}"
+}
+
+# Poblamos las celdas con los valores
+for key, valor in datos.items():
+    celda = ubicaciones[key]
+    hoja[celda] = valor
+
+# guardamos los cambios
+libro.save(ruta_excel)
+"""
+
